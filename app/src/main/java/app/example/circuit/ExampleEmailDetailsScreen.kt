@@ -5,8 +5,6 @@ package app.example.circuit
 // THIS IS AN EXAMPLE FILE WITH CIRCUIT SCREENS AND PRESENTERS
 // Example content is taken from https://slackhq.github.io/circuit/tutorial/
 //
-// You should delete this file and create your own screens with presenters.
-//
 //  -------------------------------------------------------------------------------------
 
 import android.util.Log

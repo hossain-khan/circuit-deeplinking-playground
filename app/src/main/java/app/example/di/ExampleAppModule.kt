@@ -6,7 +6,6 @@ import dagger.Module
 import dagger.Provides
 
 // Example of a Dagger module that provides dependencies for the app.
-// You should delete this file and create your own modules.
 @ContributesTo(AppScope::class)
 @Module
 class ExampleAppModule {
