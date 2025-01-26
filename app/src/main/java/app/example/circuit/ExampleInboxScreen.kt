@@ -11,8 +11,11 @@ import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -98,7 +101,9 @@ fun Inbox(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { state.eventSink(InboxScreen.Event.NewEmailClicked) },
-                content = { Text("New Email") },
+                expanded = true,
+                icon = { Icon(Icons.Filled.Add, "New email icon") },
+                text = { Text(text = "New Email") },
             )
         },
     ) { innerPadding ->
