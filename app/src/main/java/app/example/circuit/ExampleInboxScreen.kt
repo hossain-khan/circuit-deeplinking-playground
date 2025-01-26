@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -46,6 +47,8 @@ data object InboxScreen : Screen {
         data class EmailClicked(
             val emailId: String,
         ) : Event()
+
+        data object NewEmailClicked : Event()
     }
 }
 
@@ -70,6 +73,7 @@ class InboxPresenter
                 when (event) {
                     // Navigate to the detail screen when an email is clicked
                     is InboxScreen.Event.EmailClicked -> navigator.goTo(DetailScreen(event.emailId))
+                    InboxScreen.Event.NewEmailClicked -> navigator.goTo(DraftNewEmailScreen)
                 }
             }
         }
@@ -88,7 +92,16 @@ fun Inbox(
     state: InboxScreen.State,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(modifier = modifier, topBar = { TopAppBar(title = { Text("Inbox") }) }) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = { TopAppBar(title = { Text("Inbox") }) },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { state.eventSink(InboxScreen.Event.NewEmailClicked) },
+                content = { Text("New Email") },
+            )
+        },
+    ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(state.emails) { email ->
                 EmailItem(

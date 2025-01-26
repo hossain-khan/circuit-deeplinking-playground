@@ -25,9 +25,24 @@ data class Email(
 )
 
 interface ExampleEmailRepository {
+    /**
+     * Retrieves a list of all emails.
+     */
     fun getEmails(): List<Email>
 
+    /**
+     * Retrieves a specific email by its ID.
+     */
     fun getEmail(emailId: String): Email
+
+    /**
+     * Sends an email to the specified [recipients].
+     */
+    fun sendEmail(
+        recipients: List<String>,
+        subject: String,
+        body: String,
+    )
 }
 
 /**
@@ -68,4 +83,12 @@ class ExampleEmailRepositoryImpl
         override fun getEmail(emailId: String): Email =
             getEmails().find { it.id == emailId }
                 ?: throw IllegalArgumentException("Email not found")
+
+        override fun sendEmail(
+            recipients: List<String>,
+            subject: String,
+            body: String,
+        ) {
+            // Send email logic
+        }
     }
