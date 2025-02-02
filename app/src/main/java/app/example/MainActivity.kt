@@ -10,7 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import app.example.circuit.DetailScreen
 import app.example.circuit.InboxScreen
-import app.example.deeplinking.DEEP_LINK_HOST_VIEW_EMAIL
+import app.example.deeplinking.DEEP_LINK_PATH_VIEW_EMAIL
 import app.example.deeplinking.getIdFromPath
 import app.example.di.ActivityKey
 import app.example.di.AppScope
@@ -71,7 +71,7 @@ class MainActivity
             val dataUri: Uri = intent.data ?: return null
 
             when (dataUri.host) {
-                DEEP_LINK_HOST_VIEW_EMAIL -> {
+                DEEP_LINK_PATH_VIEW_EMAIL -> {
                     val emailId = getIdFromPath(dataUri)
                     if (emailId != null) {
                         return listOf(DetailScreen(emailId)).toImmutableList()
