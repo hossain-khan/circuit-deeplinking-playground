@@ -9,9 +9,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import app.example.circuit.DetailScreen
+import app.example.circuit.DraftNewEmailScreen
 import app.example.circuit.InboxScreen
+import app.example.deeplinking.DEEP_LINK_EMAIL_ID_QUERY_PARAM
+import app.example.deeplinking.DEEP_LINK_PATH_DRAFT_NEW_EMAIL
+import app.example.deeplinking.DEEP_LINK_PATH_INBOX
 import app.example.deeplinking.DEEP_LINK_PATH_VIEW_EMAIL
-import app.example.deeplinking.getIdFromPath
 import app.example.di.ActivityKey
 import app.example.di.AppScope
 import app.example.ui.theme.ComposeAppTheme
@@ -70,14 +73,30 @@ class MainActivity
         private fun parseDeepLink(intent: Intent): ImmutableList<Screen>? {
             val dataUri: Uri = intent.data ?: return null
 
-            when (dataUri.host) {
-                DEEP_LINK_PATH_VIEW_EMAIL -> {
-                    val emailId = getIdFromPath(dataUri)
-                    if (emailId != null) {
-                        return listOf(DetailScreen(emailId)).toImmutableList()
+            val screens = mutableListOf<Screen>()
+            dataUri.pathSegments.filter { it.isNotBlank() }.forEach { pathSegment ->
+                when (pathSegment) {
+                    DEEP_LINK_PATH_INBOX -> {
+                        screens.add(InboxScreen)
                     }
+                    DEEP_LINK_PATH_VIEW_EMAIL -> {
+                        // For email screen, we require the email id from query parameter
+                        val emailId = dataUri.getQueryParameter(DEEP_LINK_EMAIL_ID_QUERY_PARAM)
+                        if (emailId != null) {
+                            screens.add(DetailScreen(emailId))
+                        }
+                    }
+                    DEEP_LINK_PATH_DRAFT_NEW_EMAIL -> {
+                        screens.add(DraftNewEmailScreen)
+                    }
+                    else -> Log.d("MainActivity", "Unknown path segment: $pathSegment")
                 }
             }
-            return null
+
+            return if (screens.isNotEmpty()) {
+                screens.toImmutableList()
+            } else {
+                null
+            }
         }
     }
