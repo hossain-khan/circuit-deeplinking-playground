@@ -70,33 +70,25 @@ class MainActivity
             }
         }
 
+        /**
+         * Parses the deep link from the given [Intent.getData] and returns a list of screens to navigate to.
+         */
         private fun parseDeepLink(intent: Intent): ImmutableList<Screen>? {
-            val dataUri: Uri = intent.data ?: return null
-
+            val dataUri = intent.data ?: return null
             val screens = mutableListOf<Screen>()
+
             dataUri.pathSegments.filter { it.isNotBlank() }.forEach { pathSegment ->
                 when (pathSegment) {
-                    DEEP_LINK_PATH_INBOX -> {
-                        screens.add(InboxScreen)
-                    }
-                    DEEP_LINK_PATH_VIEW_EMAIL -> {
-                        // For email screen, we require the email id from query parameter
-                        val emailId = dataUri.getQueryParameter(DEEP_LINK_EMAIL_ID_QUERY_PARAM)
-                        if (emailId != null) {
-                            screens.add(DetailScreen(emailId))
+                    DEEP_LINK_PATH_INBOX -> screens.add(InboxScreen)
+                    DEEP_LINK_PATH_VIEW_EMAIL ->
+                        dataUri.getQueryParameter(DEEP_LINK_EMAIL_ID_QUERY_PARAM)?.let {
+                            screens.add(DetailScreen(it))
                         }
-                    }
-                    DEEP_LINK_PATH_DRAFT_NEW_EMAIL -> {
-                        screens.add(DraftNewEmailScreen)
-                    }
+                    DEEP_LINK_PATH_DRAFT_NEW_EMAIL -> screens.add(DraftNewEmailScreen)
                     else -> Log.d("MainActivity", "Unknown path segment: $pathSegment")
                 }
             }
 
-            return if (screens.isNotEmpty()) {
-                screens.toImmutableList()
-            } else {
-                null
-            }
+            return screens.takeIf { it.isNotEmpty() }?.toImmutableList()
         }
     }
