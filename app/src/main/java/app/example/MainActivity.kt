@@ -27,8 +27,6 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import com.squareup.anvil.annotations.ContributesMultibinding
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class, boundType = Activity::class)
@@ -50,7 +48,7 @@ class MainActivity
 
             setContent {
                 ComposeAppTheme {
-                    val stack: ImmutableList<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen).toImmutableList()
+                    val stack: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
                     // See https://slackhq.github.io/circuit/navigation/
                     val backStack = rememberSaveableBackStack(stack)
                     val navigator: Navigator = rememberCircuitNavigator(backStack)
@@ -73,7 +71,7 @@ class MainActivity
         /**
          * Parses the deep link from the given [Intent.getData] and returns a list of screens to navigate to.
          */
-        private fun parseDeepLink(intent: Intent): ImmutableList<Screen>? {
+        private fun parseDeepLink(intent: Intent): List<Screen>? {
             val dataUri = intent.data ?: return null
             val screens = mutableListOf<Screen>()
 
@@ -89,6 +87,6 @@ class MainActivity
                 }
             }
 
-            return screens.takeIf { it.isNotEmpty() }?.toImmutableList()
+            return screens.takeIf { it.isNotEmpty() }
         }
     }
