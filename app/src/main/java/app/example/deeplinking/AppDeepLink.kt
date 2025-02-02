@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 /**
  *
  * ```
- * $ adb shell am start -W -a android.intent.action.VIEW -d "appurischeme://view_email/123" app.example
+ * $ adb shell am start -W -a android.intent.action.VIEW -d "appurischeme://view_email/2" app.example
  * ```
  */
 internal const val DEEP_LINK_SCHEME = "appurischeme"

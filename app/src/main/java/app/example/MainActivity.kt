@@ -21,8 +21,11 @@ import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import com.squareup.anvil.annotations.ContributesMultibinding
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class, boundType = Activity::class)
@@ -44,8 +47,9 @@ class MainActivity
 
             setContent {
                 ComposeAppTheme {
+                    val stack: ImmutableList<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen).toImmutableList()
                     // See https://slackhq.github.io/circuit/navigation/
-                    val backStack = rememberSaveableBackStack(root = InboxScreen)
+                    val backStack = rememberSaveableBackStack(stack)
                     val navigator: Navigator = rememberCircuitNavigator(backStack)
 
                     // See https://slackhq.github.io/circuit/circuit-content/
@@ -63,23 +67,17 @@ class MainActivity
             }
         }
 
-        override fun onNewIntent(intent: Intent) {
-            super.onNewIntent(intent)
-            Log.d("App", "onNewIntent received $intent with data: ${intent.data}")
-            handleDeepLink(intent)
-        }
+        private fun parseDeepLink(intent: Intent): ImmutableList<Screen>? {
+            val dataUri: Uri = intent.data ?: return null
 
-        private fun handleDeepLink(intent: Intent) {
-            val dataUri: Uri? = intent.data
-            if (dataUri != null) {
-                when (dataUri.host) {
-                    DEEP_LINK_HOST_VIEW_EMAIL -> {
-                        val emailId = getIdFromPath(dataUri)
-                        if (emailId != null) {
-                            navigator.goTo(DetailScreen(emailId))
-                        }
+            when (dataUri.host) {
+                DEEP_LINK_HOST_VIEW_EMAIL -> {
+                    val emailId = getIdFromPath(dataUri)
+                    if (emailId != null) {
+                        return listOf(DetailScreen(emailId)).toImmutableList()
                     }
                 }
             }
+            return null
         }
     }
