@@ -16,7 +16,7 @@ To keep things very simple and easy to understand, we will be focusing on deep l
 You can then extend the idea to other platforms as needed.
 
 > [!IMPORTANT]  
-> Pre-requisite: You should having basic understanding of deep linking and should go through the Android's official [training guide](https://developer.android.com/training/app-links/deep-linking) material first.
+> Pre-requisite: You should have basic understanding of deep linking and should go through the Android's official [training guide](https://developer.android.com/training/app-links/deep-linking) that contains useful information about deep linking to android app.
 
 ### Deep linking strategy
 Essentially, you need to define a strategy for you app to handle the incoming deep link. We will take a look at Circuit's [email app](https://slackhq.github.io/circuit/tutorial/) from the tutorial with following screens:
