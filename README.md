@@ -95,6 +95,11 @@ adb shell am start -W \
 
 It should launch the app and navigate to the Draft Screen with backstack containing Details Screen and Inbox Screen.
 
+----
+
+Quick demo of deep linking working using the sample code:
+
+![Circuit-deep-linking-simple-demo](https://github.com/user-attachments/assets/377b2245-6498-4906-a266-e1d6385d8229)
 
 
 [circuit]: https://slackhq.github.io/circuit/
