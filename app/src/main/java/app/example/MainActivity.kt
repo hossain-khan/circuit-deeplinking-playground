@@ -48,10 +48,10 @@ class MainActivity
 
             setContent {
                 ComposeAppTheme {
-                    val stack: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
+                    val screensStack: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
                     // See https://slackhq.github.io/circuit/navigation/
-                    val backStack = rememberSaveableBackStack(stack)
-                    val navigator: Navigator = rememberCircuitNavigator(backStack)
+                    val backStack = rememberSaveableBackStack(screensStack)
+                    val navigator = rememberCircuitNavigator(backStack)
 
                     // See https://slackhq.github.io/circuit/circuit-content/
                     CircuitCompositionLocals(circuit) {
