@@ -16,6 +16,12 @@ import androidx.core.net.toUri
  * # Deep link to inbox, details, and draft (not a great example, but showcasing 3 screens)
  * $ adb shell am start -W -a android.intent.action.VIEW -d "circuitapp://emailonthego/inbox/view_email/new_email/?emailId=2" app.example
  * ```
+ * For demo:
+ * ```sh
+ * adb shell am start -W \
+ *   -a android.intent.action.VIEW \
+ *   -d "circuitapp://emailonthego/inbox/view_email/new_email/?emailId=2"
+ * ```
  */
 internal const val DEEP_LINK_SCHEME = "circuitapp"
 internal const val DEEP_LINK_HOST = "emailonthego"

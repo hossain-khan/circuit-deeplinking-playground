@@ -18,11 +18,11 @@ You can then extend the idea to other platforms as needed.
 > [!IMPORTANT]  
 > Pre-requisite: You should having basic understanding of deep linking and should go through the Android's official [training guide](https://developer.android.com/training/app-links/deep-linking) material first.
 
-### Steps
+### Deep linking strategy
 Essentially, you need to define a strategy for you app to handle the incoming deep link. We will take a look at Circuit's [email app](https://slackhq.github.io/circuit/tutorial/) from the tutorial with following screens:
 * **Inbox Screen** - List all incoming emails
 * **Details Screen** - Show details of the email
-* **Draft Screen** - Compose a new email _(additional screen added for demo)_
+* **Draft Screen** - Compose a new email _(additional screen added for this demo)_
 
 By default, the app launches with **Inbox Screen** as the root screen. To deep link into other two screens, we will define URI path segment as:
 * **`inbox`** - Inbox Screen
@@ -37,9 +37,10 @@ Assuming, our app's URI scheme is `circuitapp://` with host `emailonthego`, the 
 
 Once you have added [intent-filter](https://developer.android.com/training/app-links/deep-linking#adding-filters) in your `AndroidManifest.xml` file, you can handle the incoming deep link in your `Activity` or `Fragment` as needed.
 
-
+### Handling deep link in Circuit
 In our case, we will create a `parseDeepLink` function to parse the incoming deep link and return the list of screens to be displayed in the app.
 ```kotlin
+// In your `MainActivity.kt` or activity that has the `intent-filter` for custom URI scheme
 override fun onCreate(savedInstanceState: Bundle?) {
     // ...
 
@@ -80,6 +81,21 @@ private fun parseDeepLink(intent: Intent): List<Screen>? {
     return screens.takeIf { it.isNotEmpty() }
 }
 ```
+
+> [!TIP]  
+> Ideally, you would have deep link components that does the parsing and building screens based on parameters provided in the deep link URI.
+
+
+To test try the following command from the terminal:
+```shell
+adb shell am start -W \
+  -a android.intent.action.VIEW \
+  -d "circuitapp://emailonthego/inbox/view_email/new_email/?emailId=2"
+```
+
+It should launch the app and navigate to the Draft Screen with backstack containing Details Screen and Inbox Screen.
+
+
 
 [circuit]: https://slackhq.github.io/circuit/
 [deeplinking]: https://en.wikipedia.org/wiki/Mobile_deep_linking
