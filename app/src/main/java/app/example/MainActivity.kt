@@ -36,8 +36,6 @@ class MainActivity
   constructor(
     private val circuit: Circuit,
   ) : ComponentActivity() {
-    private lateinit var navigator: Navigator
-
     override fun onCreate(savedInstanceState: Bundle?) {
       enableEdgeToEdge()
       super.onCreate(savedInstanceState)
@@ -48,6 +46,7 @@ class MainActivity
 
       setContent {
         MaterialTheme {
+          // When there is no deeplink data in the intent, default to Inbox Screen as root screen
           var stackedScreens: List<Screen> by remember {
             mutableStateOf(parseDeepLink(intent) ?: listOf(InboxScreen))
           }
@@ -71,7 +70,8 @@ class MainActivity
     }
 
     /**
-     * Parses the deep link from the given [Intent.getData] and returns a list of screens to navigate to.
+     * Parses the deep link from the given [Intent.getData] and returns a list of stacked screens
+     * to navigate to when deep link URI is available.
      */
     private fun parseDeepLink(intent: Intent): List<Screen>? {
       val dataUri = intent.data ?: return null
