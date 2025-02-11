@@ -48,8 +48,9 @@ class MainActivity
 
       setContent {
         MaterialTheme {
-          val screens: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
-          var stackedScreens by remember { mutableStateOf(screens) }
+          var stackedScreens: List<Screen> by remember {
+            mutableStateOf(parseDeepLink(intent) ?: listOf(InboxScreen))
+          }
           // See https://slackhq.github.io/circuit/navigation/
           val backStack = rememberSaveableBackStack(stackedScreens)
           val navigator = rememberCircuitNavigator(backStack)
