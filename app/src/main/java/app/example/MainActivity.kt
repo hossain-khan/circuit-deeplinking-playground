@@ -11,7 +11,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import app.example.circuit.DetailScreen
 import app.example.circuit.DraftNewEmailScreen
@@ -23,7 +22,6 @@ import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import com.squareup.anvil.annotations.ContributesMultibinding
@@ -36,7 +34,7 @@ class MainActivity
   constructor(
     private val circuit: Circuit,
   ) : ComponentActivity() {
-    private lateinit var navigator: Navigator
+    private var stackedScreens by mutableStateOf<List<Screen>>(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
       enableEdgeToEdge()
@@ -48,8 +46,8 @@ class MainActivity
 
       setContent {
         MaterialTheme {
-          val screens: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
-          var stackedScreens by remember { mutableStateOf(screens) }
+          stackedScreens = parseDeepLink(intent) ?: listOf(InboxScreen)
+          // var stackedScreens by remember { mutableStateOf(screens) }
           // See https://slackhq.github.io/circuit/navigation/
           val backStack = rememberSaveableBackStack(stackedScreens)
           val navigator = rememberCircuitNavigator(backStack)
@@ -67,6 +65,12 @@ class MainActivity
           }
         }
       }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+      super.onNewIntent(intent)
+      Log.d("App", "onNewIntent received: $intent")
+      stackedScreens = parseDeepLink(intent) ?: listOf(InboxScreen)
     }
 
     /**
