@@ -53,162 +53,162 @@ import kotlinx.parcelize.Parcelize
 // See https://slackhq.github.io/circuit/screen/
 @Parcelize
 data class DetailScreen(
-    val emailId: String,
+  val emailId: String,
 ) : Screen {
-    data class State(
-        val email: Email,
-        val eventSink: (Event) -> Unit,
-    ) : CircuitUiState
+  data class State(
+    val email: Email,
+    val eventSink: (Event) -> Unit,
+  ) : CircuitUiState
 
-    sealed class Event : CircuitUiEvent {
-        data object BackClicked : Event()
-    }
+  sealed class Event : CircuitUiEvent {
+    data object BackClicked : Event()
+  }
 }
 
 // See https://slackhq.github.io/circuit/presenter/
 class DetailPresenter
-    @AssistedInject
-    constructor(
-        @Assisted private val navigator: Navigator,
-        @Assisted private val screen: DetailScreen,
-        private val emailRepository: ExampleEmailRepository,
-        private val exampleEmailValidator: ExampleEmailValidator,
-    ) : Presenter<DetailScreen.State> {
-        @Composable
-        override fun present(): DetailScreen.State {
-            val email = emailRepository.getEmail(screen.emailId)
+  @AssistedInject
+  constructor(
+    @Assisted private val navigator: Navigator,
+    @Assisted private val screen: DetailScreen,
+    private val emailRepository: ExampleEmailRepository,
+    private val exampleEmailValidator: ExampleEmailValidator,
+  ) : Presenter<DetailScreen.State> {
+    @Composable
+    override fun present(): DetailScreen.State {
+      val email = emailRepository.getEmail(screen.emailId)
 
-            // Example usage of the validator that is injected in this presenter
-            val allValidEmail = email.recipients.all { exampleEmailValidator.isValidEmail(it) }
-            Log.d("DetailPresenter", "Is ${email.recipients} valid: $allValidEmail")
+      // Example usage of the validator that is injected in this presenter
+      val allValidEmail = email.recipients.all { exampleEmailValidator.isValidEmail(it) }
+      Log.d("DetailPresenter", "Is ${email.recipients} valid: $allValidEmail")
 
-            return DetailScreen.State(email) { event ->
-                when (event) {
-                    DetailScreen.Event.BackClicked -> navigator.pop()
-                }
-            }
+      return DetailScreen.State(email) { event ->
+        when (event) {
+          DetailScreen.Event.BackClicked -> navigator.pop()
         }
-
-        @CircuitInject(DetailScreen::class, AppScope::class)
-        @AssistedFactory
-        fun interface Factory {
-            fun create(
-                navigator: Navigator,
-                screen: DetailScreen,
-            ): DetailPresenter
-        }
+      }
     }
+
+    @CircuitInject(DetailScreen::class, AppScope::class)
+    @AssistedFactory
+    fun interface Factory {
+      fun create(
+        navigator: Navigator,
+        screen: DetailScreen,
+      ): DetailPresenter
+    }
+  }
 
 @CircuitInject(DetailScreen::class, AppScope::class)
 @Composable
 fun EmailDetailContent(
-    state: DetailScreen.State,
-    modifier: Modifier = Modifier,
+  state: DetailScreen.State,
+  modifier: Modifier = Modifier,
 ) {
-    val email = state.email
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier.padding(innerPadding).padding(16.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Image(
-                    Icons.Default.Person,
-                    modifier =
-                        Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Color.Magenta)
-                            .padding(4.dp),
-                    colorFilter = ColorFilter.tint(Color.White),
-                    contentDescription = null,
-                )
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Row {
-                        Text(
-                            text = email.sender,
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(
-                            text = email.timestamp,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.alpha(0.5f),
-                        )
-                    }
-                    Text(text = email.subject, style = MaterialTheme.typography.labelMedium)
-                    Row {
-                        Text(
-                            "To: ",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(
-                            text = email.recipients.joinToString(","),
-                            style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.alpha(0.5f),
-                        )
-                    }
-                }
-            }
-            @Suppress("DEPRECATION") // Deprecated in Android but not yet available in CM
-            (Divider(modifier = Modifier.padding(vertical = 16.dp)))
-            Text(text = email.body, style = MaterialTheme.typography.bodyMedium)
-
-            Button(
-                onClick = { state.eventSink(DetailScreen.Event.BackClicked) },
-                modifier = Modifier.padding(top = 16.dp).align(Alignment.End),
-            ) {
-                Text("Go Back")
-            }
+  val email = state.email
+  Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Column(modifier.padding(innerPadding).padding(16.dp)) {
+      Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Image(
+          Icons.Default.Person,
+          modifier =
+            Modifier
+              .size(40.dp)
+              .clip(CircleShape)
+              .background(Color.Magenta)
+              .padding(4.dp),
+          colorFilter = ColorFilter.tint(Color.White),
+          contentDescription = null,
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+          Row {
+            Text(
+              text = email.sender,
+              modifier = Modifier.weight(1f),
+              style = MaterialTheme.typography.titleMedium,
+              fontWeight = FontWeight.Bold,
+            )
+            Text(
+              text = email.timestamp,
+              style = MaterialTheme.typography.bodySmall,
+              modifier = Modifier.alpha(0.5f),
+            )
+          }
+          Text(text = email.subject, style = MaterialTheme.typography.labelMedium)
+          Row {
+            Text(
+              "To: ",
+              style = MaterialTheme.typography.labelMedium,
+              fontWeight = FontWeight.Bold,
+            )
+            Text(
+              text = email.recipients.joinToString(","),
+              style = MaterialTheme.typography.labelMedium,
+              modifier = Modifier.alpha(0.5f),
+            )
+          }
         }
+      }
+      @Suppress("DEPRECATION") // Deprecated in Android but not yet available in CM
+      (Divider(modifier = Modifier.padding(vertical = 16.dp)))
+      Text(text = email.body, style = MaterialTheme.typography.bodyMedium)
+
+      Button(
+        onClick = { state.eventSink(DetailScreen.Event.BackClicked) },
+        modifier = Modifier.padding(top = 16.dp).align(Alignment.End),
+      ) {
+        Text("Go Back")
+      }
     }
+  }
 }
 
 /** A simple email item to show in a list. */
 @Composable
 fun EmailItem(
-    email: Email,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+  email: Email,
+  modifier: Modifier = Modifier,
+  onClick: () -> Unit = {},
 ) {
-    Row(
-        modifier.clickable(onClick = onClick).padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Image(
-            Icons.Default.Person,
-            modifier =
-                Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color.Magenta)
-                    .padding(4.dp),
-            colorFilter = ColorFilter.tint(Color.White),
-            contentDescription = null,
+  Row(
+    modifier.clickable(onClick = onClick).padding(16.dp),
+    horizontalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Image(
+      Icons.Default.Person,
+      modifier =
+        Modifier
+          .size(40.dp)
+          .clip(CircleShape)
+          .background(Color.Magenta)
+          .padding(4.dp),
+      colorFilter = ColorFilter.tint(Color.White),
+      contentDescription = null,
+    )
+    Column {
+      Row {
+        Text(
+          text = email.sender,
+          modifier = Modifier.weight(1f),
+          style = MaterialTheme.typography.titleMedium,
+          fontWeight = FontWeight.Bold,
         )
-        Column {
-            Row {
-                Text(
-                    text = email.sender,
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                )
 
-                Text(
-                    text = email.timestamp,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.alpha(0.5f),
-                )
-            }
+        Text(
+          text = email.timestamp,
+          style = MaterialTheme.typography.bodySmall,
+          modifier = Modifier.alpha(0.5f),
+        )
+      }
 
-            Text(text = email.subject, style = MaterialTheme.typography.labelLarge)
-            Text(
-                text = email.body,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(0.5f),
-            )
-        }
+      Text(text = email.subject, style = MaterialTheme.typography.labelLarge)
+      Text(
+        text = email.body,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.alpha(0.5f),
+      )
     }
+  }
 }

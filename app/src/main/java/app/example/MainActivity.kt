@@ -8,16 +8,16 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import app.example.circuit.DetailScreen
 import app.example.circuit.DraftNewEmailScreen
 import app.example.circuit.InboxScreen
-import app.example.deeplinking.DEEP_LINK_EMAIL_ID_QUERY_PARAM
-import app.example.deeplinking.DEEP_LINK_PATH_DRAFT_NEW_EMAIL
-import app.example.deeplinking.DEEP_LINK_PATH_INBOX
-import app.example.deeplinking.DEEP_LINK_PATH_VIEW_EMAIL
 import app.example.di.ActivityKey
 import app.example.di.AppScope
-import app.example.ui.theme.ComposeAppTheme
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -32,61 +32,62 @@ import javax.inject.Inject
 @ContributesMultibinding(AppScope::class, boundType = Activity::class)
 @ActivityKey(MainActivity::class)
 class MainActivity
-    @Inject
-    constructor(
-        private val circuit: Circuit,
-    ) : ComponentActivity() {
-        private lateinit var navigator: Navigator
+  @Inject
+  constructor(
+    private val circuit: Circuit,
+  ) : ComponentActivity() {
+    private lateinit var navigator: Navigator
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            enableEdgeToEdge()
-            super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+      enableEdgeToEdge()
+      super.onCreate(savedInstanceState)
 
-            val action: String? = intent?.action
-            val data: Uri? = intent?.data
-            Log.d("App", "onCreate action: $action, data: $data, savedInstanceState: $savedInstanceState")
+      val action: String? = intent?.action
+      val data: Uri? = intent?.data
+      Log.d("App", "onCreate action: $action, data: $data, savedInstanceState: $savedInstanceState")
 
-            setContent {
-                ComposeAppTheme {
-                    val screensStack: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
-                    // See https://slackhq.github.io/circuit/navigation/
-                    val backStack = rememberSaveableBackStack(screensStack)
-                    val navigator = rememberCircuitNavigator(backStack)
+      setContent {
+        MaterialTheme {
+          val screens: List<Screen> = parseDeepLink(intent) ?: listOf(InboxScreen)
+          var stackedScreens by remember { mutableStateOf(screens) }
+          // See https://slackhq.github.io/circuit/navigation/
+          val backStack = rememberSaveableBackStack(stackedScreens)
+          val navigator = rememberCircuitNavigator(backStack)
 
-                    // See https://slackhq.github.io/circuit/circuit-content/
-                    CircuitCompositionLocals(circuit) {
-                        NavigableCircuitContent(
-                            navigator = navigator,
-                            backStack = backStack,
-                            decoration =
-                                GestureNavigationDecoration {
-                                    navigator.pop()
-                                },
-                        )
-                    }
-                }
-            }
+          // See https://slackhq.github.io/circuit/circuit-content/
+          CircuitCompositionLocals(circuit) {
+            NavigableCircuitContent(
+              navigator = navigator,
+              backStack = backStack,
+              decoration =
+                GestureNavigationDecoration {
+                  navigator.pop()
+                },
+            )
+          }
         }
-
-        /**
-         * Parses the deep link from the given [Intent.getData] and returns a list of screens to navigate to.
-         */
-        private fun parseDeepLink(intent: Intent): List<Screen>? {
-            val dataUri = intent.data ?: return null
-            val screens = mutableListOf<Screen>()
-
-            dataUri.pathSegments.filter { it.isNotBlank() }.forEach { pathSegment ->
-                when (pathSegment) {
-                    DEEP_LINK_PATH_INBOX -> screens.add(InboxScreen)
-                    DEEP_LINK_PATH_VIEW_EMAIL ->
-                        dataUri.getQueryParameter(DEEP_LINK_EMAIL_ID_QUERY_PARAM)?.let {
-                            screens.add(DetailScreen(it))
-                        }
-                    DEEP_LINK_PATH_DRAFT_NEW_EMAIL -> screens.add(DraftNewEmailScreen)
-                    else -> Log.d("MainActivity", "Unknown path segment: $pathSegment")
-                }
-            }
-
-            return screens.takeIf { it.isNotEmpty() }
-        }
+      }
     }
+
+    /**
+     * Parses the deep link from the given [Intent.getData] and returns a list of screens to navigate to.
+     */
+    private fun parseDeepLink(intent: Intent): List<Screen>? {
+      val dataUri = intent.data ?: return null
+      val screens = mutableListOf<Screen>()
+
+      dataUri.pathSegments.filter { it.isNotBlank() }.forEach { pathSegment ->
+        when (pathSegment) {
+          "inbox" -> screens.add(InboxScreen)
+          "view_email" ->
+            dataUri.getQueryParameter("emailId")?.let {
+              screens.add(DetailScreen(it))
+            }
+          "new_email" -> screens.add(DraftNewEmailScreen)
+          else -> Log.d("App", "Unknown path segment: $pathSegment")
+        }
+      }
+
+      return screens.takeIf { it.isNotEmpty() }
+    }
+  }

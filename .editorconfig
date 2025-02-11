@@ -1,2 +1,6 @@
 [*.{kt,kts}]
 ktlint_function_naming_ignore_when_annotated_with = Composable
+indent_style = space
+indent_size = 2
+# Optional, but recommended for consistent continuation indents
+continuation_indent_size = 2

@@ -8,21 +8,21 @@ import dagger.BindsInstance
 import javax.inject.Provider
 
 @MergeComponent(
-    scope = AppScope::class,
-    modules = [ExampleAppModule::class, CircuitModule::class],
+  scope = AppScope::class,
+  modules = [ExampleAppModule::class, CircuitModule::class],
 )
 @SingleIn(AppScope::class)
 interface AppComponent {
-    val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
+  val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
 
-    @MergeComponent.Factory
-    interface Factory {
-        fun create(
-            @ApplicationContext @BindsInstance context: Context,
-        ): AppComponent
-    }
+  @MergeComponent.Factory
+  interface Factory {
+    fun create(
+      @ApplicationContext @BindsInstance context: Context,
+    ): AppComponent
+  }
 
-    companion object {
-        fun create(context: Context): AppComponent = DaggerAppComponent.factory().create(context)
-    }
+  companion object {
+    fun create(context: Context): AppComponent = DaggerAppComponent.factory().create(context)
+  }
 }

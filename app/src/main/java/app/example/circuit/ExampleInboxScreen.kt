@@ -41,79 +41,79 @@ import kotlinx.parcelize.Parcelize
 // See https://slackhq.github.io/circuit/screen/
 @Parcelize
 data object InboxScreen : Screen {
-    data class State(
-        val emails: List<Email>,
-        val eventSink: (Event) -> Unit,
-    ) : CircuitUiState
+  data class State(
+    val emails: List<Email>,
+    val eventSink: (Event) -> Unit,
+  ) : CircuitUiState
 
-    sealed class Event : CircuitUiEvent {
-        data class EmailClicked(
-            val emailId: String,
-        ) : Event()
+  sealed class Event : CircuitUiEvent {
+    data class EmailClicked(
+      val emailId: String,
+    ) : Event()
 
-        data object NewEmailClicked : Event()
-    }
+    data object NewEmailClicked : Event()
+  }
 }
 
 // See https://slackhq.github.io/circuit/presenter/
 class InboxPresenter
-    @AssistedInject
-    constructor(
-        @Assisted private val navigator: Navigator,
-        private val emailRepository: ExampleEmailRepository,
-        private val appVersionService: ExampleAppVersionService,
-    ) : Presenter<InboxScreen.State> {
-        @Composable
-        override fun present(): InboxScreen.State {
-            val emails by produceState<List<Email>>(initialValue = emptyList()) {
-                value = emailRepository.getEmails()
-            }
+  @AssistedInject
+  constructor(
+    @Assisted private val navigator: Navigator,
+    private val emailRepository: ExampleEmailRepository,
+    private val appVersionService: ExampleAppVersionService,
+  ) : Presenter<InboxScreen.State> {
+    @Composable
+    override fun present(): InboxScreen.State {
+      val emails by produceState<List<Email>>(initialValue = emptyList()) {
+        value = emailRepository.getEmails()
+      }
 
-            // This is just example of how the DI injected service is used in this presenter
-            Log.d("InboxPresenter", "Application version: ${appVersionService.getApplicationVersion()}")
+      // This is just example of how the DI injected service is used in this presenter
+      Log.d("InboxPresenter", "Application version: ${appVersionService.getApplicationVersion()}")
 
-            return InboxScreen.State(emails) { event ->
-                when (event) {
-                    // Navigate to the detail screen when an email is clicked
-                    is InboxScreen.Event.EmailClicked -> navigator.goTo(DetailScreen(event.emailId))
-                    InboxScreen.Event.NewEmailClicked -> navigator.goTo(DraftNewEmailScreen)
-                }
-            }
+      return InboxScreen.State(emails) { event ->
+        when (event) {
+          // Navigate to the detail screen when an email is clicked
+          is InboxScreen.Event.EmailClicked -> navigator.goTo(DetailScreen(event.emailId))
+          InboxScreen.Event.NewEmailClicked -> navigator.goTo(DraftNewEmailScreen)
         }
-
-        @CircuitInject(InboxScreen::class, AppScope::class)
-        @AssistedFactory
-        fun interface Factory {
-            fun create(navigator: Navigator): InboxPresenter
-        }
+      }
     }
+
+    @CircuitInject(InboxScreen::class, AppScope::class)
+    @AssistedFactory
+    fun interface Factory {
+      fun create(navigator: Navigator): InboxPresenter
+    }
+  }
 
 @CircuitInject(screen = InboxScreen::class, scope = AppScope::class)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Inbox(
-    state: InboxScreen.State,
-    modifier: Modifier = Modifier,
+  state: InboxScreen.State,
+  modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = { TopAppBar(title = { Text("Inbox") }) },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { state.eventSink(InboxScreen.Event.NewEmailClicked) },
-                expanded = true,
-                icon = { Icon(Icons.Filled.Add, "New email icon") },
-                text = { Text(text = "New Email") },
-            )
-        },
-    ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(state.emails) { email ->
-                EmailItem(
-                    email = email,
-                    onClick = { state.eventSink(InboxScreen.Event.EmailClicked(email.id)) },
-                )
-            }
-        }
+  Scaffold(
+    modifier = modifier,
+    topBar = { TopAppBar(title = { Text("Inbox") }) },
+    floatingActionButton = {
+      ExtendedFloatingActionButton(
+        onClick = { state.eventSink(InboxScreen.Event.NewEmailClicked) },
+        expanded = true,
+        icon = { Icon(Icons.Filled.Add, "New email icon") },
+        text = { Text(text = "New Email") },
+      )
+    },
+  ) { innerPadding ->
+    LazyColumn(modifier = Modifier.padding(innerPadding)) {
+      items(state.emails) { email ->
+        EmailItem(
+          email = email,
+          onClick = { state.eventSink(InboxScreen.Event.EmailClicked(email.id)) },
+        )
+      }
     }
+  }
 }

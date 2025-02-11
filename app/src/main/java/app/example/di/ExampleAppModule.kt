@@ -9,6 +9,6 @@ import dagger.Provides
 @ContributesTo(AppScope::class)
 @Module
 class ExampleAppModule {
-    @Provides
-    fun provideEmailRepository(): ExampleEmailValidator = ExampleEmailValidator()
+  @Provides
+  fun provideEmailRepository(): ExampleEmailValidator = ExampleEmailValidator()
 }

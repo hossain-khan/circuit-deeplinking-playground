@@ -15,30 +15,30 @@ import dagger.multibindings.Multibinds
 @ContributesTo(AppScope::class)
 @Module
 interface CircuitModule {
-    /**
-     * Dagger multi-binding method that provides a set of Presenter.Factory instances.
-     */
-    @Multibinds fun presenterFactories(): Set<Presenter.Factory>
+  /**
+   * Dagger multi-binding method that provides a set of Presenter.Factory instances.
+   */
+  @Multibinds fun presenterFactories(): Set<Presenter.Factory>
 
-    /**
-     * Dagger multi-binding method that provides a set of Ui.Factory instances.
-     */
-    @Multibinds fun viewFactories(): Set<Ui.Factory>
+  /**
+   * Dagger multi-binding method that provides a set of Ui.Factory instances.
+   */
+  @Multibinds fun viewFactories(): Set<Ui.Factory>
 
-    companion object {
-        /**
-         * Provides a singleton instance of Circuit with presenter and ui configured.
-         */
-        @SingleIn(AppScope::class)
-        @Provides
-        fun provideCircuit(
-            presenterFactories: @JvmSuppressWildcards Set<Presenter.Factory>,
-            uiFactories: @JvmSuppressWildcards Set<Ui.Factory>,
-        ): Circuit =
-            Circuit
-                .Builder()
-                .addPresenterFactories(presenterFactories)
-                .addUiFactories(uiFactories)
-                .build()
-    }
+  companion object {
+    /**
+     * Provides a singleton instance of Circuit with presenter and ui configured.
+     */
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideCircuit(
+      presenterFactories: @JvmSuppressWildcards Set<Presenter.Factory>,
+      uiFactories: @JvmSuppressWildcards Set<Ui.Factory>,
+    ): Circuit =
+      Circuit
+        .Builder()
+        .addPresenterFactories(presenterFactories)
+        .addUiFactories(uiFactories)
+        .build()
+  }
 }
