@@ -1,5 +1,6 @@
 pluginManagement {
   repositories {
+    mavenCentral()
     google {
       content {
         includeGroupByRegex("com\\.android.*")
@@ -7,8 +8,11 @@ pluginManagement {
         includeGroupByRegex("androidx.*")
       }
     }
-    mavenCentral()
     gradlePluginPortal()
+    maven { 
+      url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+      mavenContent { snapshotsOnly() }
+    }
   }
 }
 dependencyResolutionManagement {
@@ -16,6 +20,10 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
+    maven { 
+      url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+      mavenContent { snapshotsOnly() }
+    }
   }
 }
 

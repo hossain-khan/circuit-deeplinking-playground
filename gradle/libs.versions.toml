@@ -1,6 +1,6 @@
 [versions]
 agp = "8.8.0"
-kotlin = "2.1.0"
+kotlin = "2.1.20"  # Updated to 2.1.20 as specified
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,17 +15,21 @@ circuit = "0.25.0"
 # Kotlin Symbol Processing API
 # https://kotlinlang.org/docs/ksp-overview.html
 # https://github.com/google/ksp/releases
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.20-1.0.15"  # Updated to match Kotlin 2.1.20
 
 # Forked Anvil
 # https://github.com/ZacSweers/anvil
 anvil = "0.4.1"
 
 # https://dagger.dev/dev-guide/ksp
-dagger = "2.55"
+dagger = "2.50"  # Using a stable version
 
 # https://developer.android.com/develop/ui/compose/text/fonts
 googleFonts = "1.7.6"
+
+# Metro - Multiplatform dependency injection for Kotlin
+# https://github.com/ZacSweers/metro
+metro = "0.2.0"  # Set to 0.2.0 as specified
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,11 +66,14 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 anvil-annotations = { group = "dev.zacsweers.anvil", name = "annotations", version.ref = "anvil"}
 anvil-annotations-optional = { group = "dev.zacsweers.anvil", name = "annotations-optional", version.ref = "anvil"}
 
+# Metro DI - Multiplatform dependency injection for Kotlin
+# https://github.com/ZacSweers/metro
+metro-runtime = { group = "dev.zacsweers.metro", name = "metro-runtime", version.ref = "metro" }
+metro-compiler = { group = "dev.zacsweers.metro", name = "metro-compiler", version.ref = "metro" }
+metro-dagger-interop = { group = "dev.zacsweers.metro", name = "metro-interop-dagger", version.ref = "metro" }
 
 # https://mvnrepository.com/artifact/androidx.compose.ui/ui-text-google-fonts
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "googleFonts" }
-
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -82,5 +89,9 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 
 # https://github.com/ZacSweers/anvil/blob/main/FORK.md
 anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
+
+# Metro - Multiplatform dependency injection for Kotlin
+# https://github.com/ZacSweers/metro
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 
 

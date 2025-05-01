@@ -1,9 +1,15 @@
 package app.example.di
 
+import dev.zacsweers.metro.Scope
+import javax.inject.Scope
+
 /**
  * App scope for dependency injection.
  *
- * - https://github.com/square/anvil?tab=readme-ov-file#scopes
- * - https://github.com/square/anvil/blob/main/sample/scopes/src/main/java/com/squareup/scopes/AppScope.kt
+ * Metro scope annotation for the application-level scope.
+ * The @Scope annotation from javax.inject is kept for compatibility with Dagger during migration.
  */
-abstract class AppScope private constructor()
+@Scope
+@Scope(AppScope::class)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class AppScope

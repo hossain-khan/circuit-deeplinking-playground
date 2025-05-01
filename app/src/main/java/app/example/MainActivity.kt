@@ -26,11 +26,15 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
-import com.squareup.anvil.annotations.ContributesMultibinding
+import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.Single
+import dev.zacsweers.metro.interop.dagger.compat.DaggerInterop
 import javax.inject.Inject
 
-@ContributesMultibinding(AppScope::class, boundType = Activity::class)
+@IntoSet
+@Single(AppScope::class)
 @ActivityKey(MainActivity::class)
+@DaggerInterop
 class MainActivity
   @Inject
   constructor(

@@ -28,4 +28,8 @@ plugins {
   // Project: https://github.com/square/anvil
   // Also see: https://github.com/ZacSweers/anvil/blob/main/FORK.md
   alias(libs.plugins.anvil) apply false
+
+  // Applies the Metro plugin for dependency injection.
+  // Project: https://github.com/ZacSweers/metro
+  alias(libs.plugins.metro) apply false
 }

@@ -2,27 +2,38 @@ package app.example.di
 
 import android.app.Activity
 import android.content.Context
-import com.squareup.anvil.annotations.MergeComponent
-import com.squareup.anvil.annotations.optional.SingleIn
-import dagger.BindsInstance
+import dev.zacsweers.metro.Component
+import dev.zacsweers.metro.Module
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Single
+import dev.zacsweers.metro.interop.dagger.compat.DaggerInterop
 import javax.inject.Provider
 
-@MergeComponent(
-  scope = AppScope::class,
+@Component(
   modules = [ExampleAppModule::class, CircuitModule::class],
 )
-@SingleIn(AppScope::class)
+@Single(AppScope::class)
 interface AppComponent {
   val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
-
-  @MergeComponent.Factory
+  
+  @DaggerInterop
+  @Component.Factory
   interface Factory {
     fun create(
-      @ApplicationContext @BindsInstance context: Context,
+      @ApplicationContext context: Context,
     ): AppComponent
   }
 
   companion object {
-    fun create(context: Context): AppComponent = DaggerAppComponent.factory().create(context)
+    fun create(context: Context): AppComponent = MetroAppComponent.create(context)
   }
+}
+
+@Module
+@DaggerInterop
+object ContextModule {
+  @Provides
+  @ApplicationContext
+  @Single(AppScope::class)
+  fun provideContext(@ApplicationContext context: Context): Context = context
 }
