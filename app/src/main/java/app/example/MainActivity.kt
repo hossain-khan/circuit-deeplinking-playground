@@ -26,11 +26,11 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
-import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
 
-@ContributesMultibinding(AppScope::class, boundType = Activity::class)
 @ActivityKey(MainActivity::class)
+@ContributesIntoMap(AppScope::class)
 class MainActivity
   @Inject
   constructor(

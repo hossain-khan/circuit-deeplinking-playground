@@ -1,8 +1,9 @@
 package app.example.data
 
 import app.example.di.AppScope
-import com.squareup.anvil.annotations.ContributesBinding
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
 // -------------------------------------------------------------------------------------
 //
@@ -46,9 +47,9 @@ interface ExampleEmailRepository {
 }
 
 /**
- * This is example repository. It is used to demonstrate how to use Dagger in Anvil.
+ * This is example repository. It is used to demonstrate how to use Metro for dependency injection.
  */
-@ContributesBinding(AppScope::class)
+@ContributesBinding(AppScope::class, binding = binding<ExampleEmailRepository>())
 class ExampleEmailRepositoryImpl
   @Inject
   constructor() : ExampleEmailRepository {

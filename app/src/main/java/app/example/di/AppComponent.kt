@@ -2,27 +2,21 @@ package app.example.di
 
 import android.app.Activity
 import android.content.Context
-import com.squareup.anvil.annotations.MergeComponent
-import com.squareup.anvil.annotations.optional.SingleIn
-import dagger.BindsInstance
-import javax.inject.Provider
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provider
+import dev.zacsweers.metro.Provides
+import kotlin.reflect.KClass
 
-@MergeComponent(
-  scope = AppScope::class,
-  modules = [ExampleAppModule::class, CircuitModule::class],
-)
-@SingleIn(AppScope::class)
-interface AppComponent {
-  val activityProviders: Map<Class<out Activity>, @JvmSuppressWildcards Provider<Activity>>
+@DependencyGraph(AppScope::class)
+interface AppGraph {
+  val activityProviders: Map<KClass<out Activity>, Provider<Activity>>
 
-  @MergeComponent.Factory
+  @DependencyGraph.Factory
   interface Factory {
-    fun create(
-      @ApplicationContext @BindsInstance context: Context,
-    ): AppComponent
+    fun create(@Provides @ApplicationContext context: Context): AppGraph
   }
 
   companion object {
-    fun create(context: Context): AppComponent = DaggerAppComponent.factory().create(context)
+    fun create(context: Context): AppGraph = dev.zacsweers.metro.createGraphFactory<Factory>().create(context)
   }
 }

@@ -3,7 +3,7 @@ package app.example.di
 /**
  * App scope for dependency injection.
  *
- * - https://github.com/square/anvil?tab=readme-ov-file#scopes
- * - https://github.com/square/anvil/blob/main/sample/scopes/src/main/java/com/squareup/scopes/AppScope.kt
+ * Using Metro instead of Anvil for dependency injection.
+ * https://github.com/ZacSweers/metro
  */
 abstract class AppScope private constructor()

@@ -34,9 +34,9 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.Inject
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -66,7 +66,7 @@ data object DraftNewEmailScreen : Screen {
 }
 
 class DraftNewEmailPresenter
-  @AssistedInject
+  @Inject
   constructor(
     @Assisted private val navigator: Navigator,
     private val emailRepository: ExampleEmailRepository,
