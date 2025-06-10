@@ -92,8 +92,6 @@ dependencies {
 }
 
 ksp {
-  // Metro-KSP 
-  arg("metro-ksp-extraContributingAnnotations", "com.slack.circuit.codegen.annotations.CircuitInject")
-  // Circuit integration with Metro
-  arg("metro-extraContributingAnnotations", "com.slack.circuit.codegen.annotations.CircuitInject")
+  // Circuit integration with Metro/kotlin-inject
+  arg("me.tatarka.inject.enableJavaxAnnotations", "true")
 }

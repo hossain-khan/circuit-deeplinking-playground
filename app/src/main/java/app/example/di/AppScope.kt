@@ -1,9 +1,9 @@
 package app.example.di
 
-import dev.zacsweers.metro.MetroScope
+import me.tatarka.inject.annotations.Scope
 
 /**
  * App scope for dependency injection using Metro.
  */
-@MetroScope
-interface AppScope
+@Scope
+annotation class AppScope

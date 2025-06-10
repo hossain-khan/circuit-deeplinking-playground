@@ -1,7 +1,6 @@
 package app.example.data
 
-import app.example.di.AppScope
-import dev.zacsweers.metro.Contribute
+import me.tatarka.inject.annotations.Inject
 
 // -------------------------------------------------------------------------------------
 //
@@ -47,11 +46,7 @@ interface ExampleEmailRepository {
 /**
  * This is example repository. It is used to demonstrate Metro DI.
  */
-@Contribute(AppScope::class)
-interface ExampleEmailRepositoryBinding {
-  fun ExampleEmailRepositoryImpl.bind(): ExampleEmailRepository
-}
-
+@Inject
 class ExampleEmailRepositoryImpl : ExampleEmailRepository {
     override fun getEmails(): List<Email> =
       listOf(

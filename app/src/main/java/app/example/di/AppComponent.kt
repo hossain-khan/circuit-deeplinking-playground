@@ -18,6 +18,6 @@ abstract class AppComponent(
   abstract val circuit: Circuit
 
   companion object {
-    fun create(context: Context): AppComponent = AppComponent::class.create(context)
+    fun create(context: Context): AppComponent = AppComponent::create(context)
   }
 }
