@@ -19,7 +19,7 @@ ksp = "2.1.0-1.0.29"
 
 # Metro - Modern Kotlin DI framework
 # https://github.com/ZacSweers/metro
-metro = "0.5.1"
+metro = "0.3.7"
 
 # https://developer.android.com/develop/ui/compose/text/fonts
 googleFonts = "1.7.6"
