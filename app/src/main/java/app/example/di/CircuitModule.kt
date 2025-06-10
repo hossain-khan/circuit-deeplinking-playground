@@ -3,8 +3,10 @@ package app.example.di
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.ui.Ui
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Contribute
-import me.tatarka.inject.annotations.Provides
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 
 /**
  * Metro module that provides dependencies for the Circuit framework.
@@ -15,6 +17,7 @@ object CircuitModule {
    * Provides a singleton instance of Circuit with presenter and ui configured.
    */
   @Provides
+  @SingleIn(AppScope::class)
   fun provideCircuit(
     presenterFactories: Set<Presenter.Factory>,
     uiFactories: Set<Ui.Factory>,

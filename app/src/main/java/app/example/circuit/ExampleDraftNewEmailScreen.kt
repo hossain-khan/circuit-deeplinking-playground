@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.example.data.ExampleEmailRepository
-import app.example.di.AppScope
+import dev.zacsweers.metro.AppScope
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -35,8 +35,8 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
-import me.tatarka.inject.annotations.Assisted
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.Inject
 
 @Parcelize
 data object DraftNewEmailScreen : Screen {

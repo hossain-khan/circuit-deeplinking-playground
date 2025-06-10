@@ -1,6 +1,6 @@
 package app.example.data
 
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.Inject
 
 // -------------------------------------------------------------------------------------
 //

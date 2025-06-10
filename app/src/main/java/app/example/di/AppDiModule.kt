@@ -4,8 +4,9 @@ import android.content.Context
 import app.example.data.ExampleEmailRepository
 import app.example.data.ExampleEmailRepositoryImpl
 import app.example.data.ExampleEmailValidator
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Contribute
-import me.tatarka.inject.annotations.Provides
+import dev.zacsweers.metro.Provides
 
 /**
  * Consolidated Metro DI module for the app.
@@ -17,4 +18,7 @@ interface AppDiModule {
   
   @Provides
   fun provideEmailValidator(): ExampleEmailValidator = ExampleEmailValidator()
+  
+  @Provides
+  fun provideContext(applicationContext: ApplicationContext): Context = applicationContext.context
 }

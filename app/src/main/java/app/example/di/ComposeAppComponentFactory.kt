@@ -40,12 +40,8 @@ class ComposeAppComponentFactory : AppComponentFactory() {
   ): Activity {
     return when (className) {
       MainActivity::class.java.name -> {
-        val circuit = appComponent?.circuit
-        if (circuit != null) {
-          MainActivity(circuit)
-        } else {
-          super.instantiateActivityCompat(classLoader, className, intent)
-        }
+        appComponent?.activityProviders?.get(MainActivity::class)?.get() 
+          ?: super.instantiateActivityCompat(classLoader, className, intent)
       }
       else -> super.instantiateActivityCompat(classLoader, className, intent)
     }

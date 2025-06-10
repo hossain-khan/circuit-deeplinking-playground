@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import app.example.circuit.DetailScreen
 import app.example.circuit.DraftNewEmailScreen
 import app.example.circuit.InboxScreen
+import app.example.di.ActivityKey
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -24,8 +25,13 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
-import me.tatarka.inject.annotations.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(MainActivity::class)
 @Inject
 class MainActivity(
   private val circuit: Circuit,

@@ -78,8 +78,6 @@ dependencies {
 
   implementation(libs.metro.runtime)
   implementation(libs.metro.runtime.graph)
-  implementation(libs.kotlin.inject.runtime)
-  ksp(libs.kotlin.inject.compiler)
 
   // Testing
   testImplementation(libs.junit)
@@ -92,6 +90,6 @@ dependencies {
 }
 
 ksp {
-  // Circuit integration with Metro/kotlin-inject
-  arg("me.tatarka.inject.enableJavaxAnnotations", "true")
+  // Circuit integration with Metro
+  arg("circuit.codegen.mode", "metro")
 }
