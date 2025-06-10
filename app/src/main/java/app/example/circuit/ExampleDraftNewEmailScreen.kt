@@ -34,10 +34,9 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.parcelize.Parcelize
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 
 @Parcelize
 data object DraftNewEmailScreen : Screen {
@@ -65,12 +64,11 @@ data object DraftNewEmailScreen : Screen {
   }
 }
 
-class DraftNewEmailPresenter
-  @AssistedInject
-  constructor(
-    @Assisted private val navigator: Navigator,
-    private val emailRepository: ExampleEmailRepository,
-  ) : Presenter<DraftNewEmailScreen.State> {
+@Inject
+class DraftNewEmailPresenter(
+  @Assisted private val navigator: Navigator,
+  private val emailRepository: ExampleEmailRepository,
+) : Presenter<DraftNewEmailScreen.State> {
     @Composable
     override fun present(): DraftNewEmailScreen.State {
       val context = LocalContext.current
@@ -101,7 +99,6 @@ class DraftNewEmailPresenter
     }
 
     @CircuitInject(DraftNewEmailScreen::class, AppScope::class)
-    @AssistedFactory
     fun interface Factory {
       fun create(navigator: Navigator): DraftNewEmailPresenter
     }

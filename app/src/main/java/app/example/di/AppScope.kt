@@ -1,9 +1,9 @@
 package app.example.di
 
+import dev.zacsweers.metro.MetroScope
+
 /**
- * App scope for dependency injection.
- *
- * - https://github.com/square/anvil?tab=readme-ov-file#scopes
- * - https://github.com/square/anvil/blob/main/sample/scopes/src/main/java/com/squareup/scopes/AppScope.kt
+ * App scope for dependency injection using Metro.
  */
-abstract class AppScope private constructor()
+@MetroScope
+interface AppScope

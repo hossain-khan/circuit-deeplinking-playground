@@ -16,8 +16,6 @@ import androidx.compose.runtime.setValue
 import app.example.circuit.DetailScreen
 import app.example.circuit.DraftNewEmailScreen
 import app.example.circuit.InboxScreen
-import app.example.di.ActivityKey
-import app.example.di.AppScope
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -26,16 +24,12 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
-import com.squareup.anvil.annotations.ContributesMultibinding
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-@ContributesMultibinding(AppScope::class, boundType = Activity::class)
-@ActivityKey(MainActivity::class)
-class MainActivity
-  @Inject
-  constructor(
-    private val circuit: Circuit,
-  ) : ComponentActivity() {
+@Inject
+class MainActivity(
+  private val circuit: Circuit,
+) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
       enableEdgeToEdge()
       super.onCreate(savedInstanceState)

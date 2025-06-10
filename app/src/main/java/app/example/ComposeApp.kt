@@ -10,4 +10,10 @@ class ComposeApp : Application() {
   private val appComponent: AppComponent by lazy { AppComponent.create(this) }
 
   fun appComponent(): AppComponent = appComponent
+  
+  override fun onCreate() {
+    super.onCreate()
+    // Initialize the component for later access
+    appComponent
+  }
 }
